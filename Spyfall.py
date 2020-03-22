@@ -1,6 +1,11 @@
+import random
+import subprocess
+
+
 def main():
-    guestList = [["Name", "Phone Number", "Carrier", False],
+    guestList = [["Name", "Phone Number", "Carrier", "Playing"],
     ["Hoang Le", 4082045738, "Verizon", True], 
+    ["Jon Luu", 4084992787, "ATT", True],
     ["Work", 5103355199, "Verizon", True]]
 
     locations = ["Locations", "Airplane", "Amusement Park", "Bank", 
@@ -13,11 +18,20 @@ def main():
     "Universtiy", "Zoo", "Space Station", "Submarine", 
     "Supermarket", "Theater"]
 
-    removeAFK(guestList)
+    location = locations[random.randint(0, len(locations)-1)]
 
+    players = removeAFK(guestList)
+    spyIndex = random.randint(0, len(players)-1)
+    spy = players[spyIndex]
+    players.pop(spyIndex)
+    
+    subprocess.call("cls", shell=True)
+    print (spy[0] + ", you are the spy!" )
 
+    messagePlayers(players, location)
+    #print (players)
 
-
+    
 def removeAFK(guestList):
     players = []
 
@@ -25,9 +39,12 @@ def removeAFK(guestList):
         if (guestList[i][3] == True):
             players.append(guestList[i])
 
-    print(players)
-    #test
-
+    return players
+    
+    
+def messagePlayers(players, location):
+    for i in range(len(players)):
+        print (players[i][0] + ", you are at the " + location +".")
 
 
 main()
