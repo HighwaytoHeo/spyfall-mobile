@@ -26,7 +26,7 @@ def removeAFK(guestList):
             players.append(guestList[i])
 
     print(players)
-
+    #test
 
 
 
