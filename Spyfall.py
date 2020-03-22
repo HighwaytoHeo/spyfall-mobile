@@ -11,7 +11,7 @@ def main():
     locations = ["Locations", "Airplane", "Amusement Park", "Bank", 
     "Beach", "Circus tent", "Corporate Party", "Crusader Army", 
     "Day Spa", "Hotel", "Military Base", "Movie Studio", 
-    "Nightclub", "Pirate Ship", "Polar Sataion", 
+    "Nightclub", "Pirate Ship", "Polar Station", 
     "Police Station", "Restaurant", "Carnival", "Embassy", 
     "Ocean Liner", "School", "University", "Casino", 
     "Hosiptal", "Passenger Train", "Service Station", 
