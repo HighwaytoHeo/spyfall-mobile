@@ -4,9 +4,9 @@ import subprocess
 
 def main():
     guestList = [["Name", "Phone Number", "Carrier", "Playing"],
-    ["Hoang Le", 4082045738, "Verizon", True], 
-    ["Jon Luu", 4084992787, "ATT", True],
-    ["Work", 5103355199, "Verizon", True]]
+    ["Hoang Le", "Verizon", True], 
+    ["Jon Luu", "ATT", True],
+    ["Work", "Verizon", True]]
 
     locations = ["Locations", "Airplane", "Amusement Park", "Bank", 
     "Beach", "Circus tent", "Corporate Party", "Crusader Army", 
