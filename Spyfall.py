@@ -14,8 +14,8 @@ def main():
     "Nightclub", "Pirate Ship", "Polar Station", 
     "Police Station", "Restaurant", "Carnival", "Embassy", 
     "Ocean Liner", "School", "University", "Casino", 
-    "Hosiptal", "Passenger Train", "Service Station", 
-    "Universtiy", "Zoo", "Space Station", "Submarine", 
+    "Hospital", "Passenger Train", "Service Station", 
+    "University", "Zoo", "Space Station", "Submarine", 
     "Supermarket", "Theater"]
 
     location = locations[random.randint(0, len(locations)-1)]
