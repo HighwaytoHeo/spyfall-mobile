@@ -33,17 +33,18 @@ def get_all_players(pretty=""):
         db.execute(query)
         result = db.fetchall()
     if pretty.lower() == 'pretty':
-        return pd.DataFrame.from_dict(result)
+        return pd.DataFrame.from_dict(result)   # return dataframe
     else:  
-        return result
+        return result       # return list
     
 def get_player(kword, pretty=""):
     df = get_all_players('pretty')
+    # Lambda function to search for the kword anywhere in the dataframe
     row = df.apply(lambda ks: any(ks == kword), axis=1)
     if pretty.lower() == 'pretty':
-        return df[row]
+        return df[row]                  # return dataframe
     else:
-        return df[row].to_dict('list')
+        return df[row].to_dict('list')  # return dict
     
 def add_player(fname, lname, mobilenum, mobilecarrier):
     with SpyfallDB() as db:
@@ -55,10 +56,15 @@ def add_player(fname, lname, mobilenum, mobilecarrier):
         db.execute(query, val)
         
 def del_player(userid):
-    empty_row = {'UserId': [], 'FirstName': [], 'LastName': [], 'MobileNum': [], 'MobileCarrier': []}
+    empty_row = {'UserId': [], 
+                 'FirstName': [], 
+                 'LastName': [], 
+                 'MobileNum': [], 
+                 'MobileCarrier': []}
     with SpyfallDB() as db:
         query = "DELETE FROM tblUsers WHERE UserId = %s"
         db.execute(query, (userid))
+    # Checking to ensure no record is found (empty row)
     if (get_player(userid) == empty_row):
         return True
     else:
