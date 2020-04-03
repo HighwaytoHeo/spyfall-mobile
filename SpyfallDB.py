@@ -55,7 +55,7 @@ def add_player(fname, lname, mobilenum, mobilecarrier):
         val = (fname, lname, mobilenum, mobilecarrier)
         db.execute(query, val)
         
-def del_player(userid):
+def remove_player(userid):
     empty_row = {'UserId': [], 
                  'FirstName': [], 
                  'LastName': [], 
