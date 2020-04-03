@@ -43,4 +43,43 @@ def get_player(kword, pretty=""):
     if pretty.lower() == 'pretty':
         return df[row]
     else:
-        return df[row].to_dict('records')
+        return df[row].to_dict('list')
+    
+def add_player(fname, lname, mobilenum, mobilecarrier):
+    with SpyfallDB() as db:
+        query = """INSERT INTO tblUsers 
+                   (FirstName, LastName, MobileNum, MobileCarrier)
+                   VALUES 
+                   (%s, %s, %s, %s)"""
+        val = (fname, lname, mobilenum, mobilecarrier)
+        db.execute(query, val)
+        
+def del_player(userid):
+    empty_row = {'UserId': [], 'FirstName': [], 'LastName': [], 'MobileNum': [], 'MobileCarrier': []}
+    with SpyfallDB() as db:
+        query = "DELETE FROM tblUsers WHERE UserId = %s"
+        db.execute(query, (userid))
+    if (get_player(userid) == empty_row):
+        return True
+    else:
+        return False
+        
+def update_player(attrib, value, userid):
+    COL_NAMES = ('FirstName','LastName','MobileNum','MobileCarrier')
+    if attrib in COL_NAMES:
+        with SpyfallDB() as db:
+            query = f"""UPDATE tblUsers
+                    SET {attrib} = %s
+                    WHERE UserId = %s"""
+            val = (value, userid)
+            db.execute(query, (val))
+    else:
+        # print("Invalid column name. Please check and try again.")
+        return False
+    # Test to see if the update was successful
+    upd_row = get_player(userid)
+    if (upd_row.get(attrib) == [value]):
+        return True
+    else:
+        # print("There is an inconsistency. Double check tblUsers.")
+        return False
