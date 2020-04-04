@@ -39,8 +39,9 @@ def get_all_players(pretty=""):
     
 def get_player(kword, pretty=""):
     df = get_all_players('pretty')
+    df_lower = df.apply(lambda x: x.astype(str).str.lower())
     # Lambda function to search for the kword anywhere in the dataframe
-    row = df.apply(lambda ks: any(ks == kword), axis=1)
+    row = df_lower.apply(lambda ks: any(ks == kword.lower()), axis=1)
     if pretty.lower() == 'pretty':
         return df[row]                  # return dataframe
     else:
