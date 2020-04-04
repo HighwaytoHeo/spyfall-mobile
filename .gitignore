@@ -1,3 +1,7 @@
 Spyfall.code-workspace
 .vscode/settings.json
 spyfalldb.conf
+env
+token.json
+token.pickle
+credentials.json
