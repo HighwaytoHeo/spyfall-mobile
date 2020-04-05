@@ -41,7 +41,7 @@ def get_player(kword, pretty=""):
     df = get_all_players('pretty')
     df_lower = df.apply(lambda x: x.astype(str).str.lower())
     # Lambda function to search for the kword anywhere in the dataframe
-    row = df_lower.apply(lambda ks: any(ks == kword.lower()), axis=1)
+    row = df_lower.apply(lambda ks: any(ks == str(kword).lower()), axis=1)
     if pretty.lower() == 'pretty':
         return df[row]                  # return dataframe
     else:
@@ -72,8 +72,11 @@ def remove_player(userid):
         return False
         
 def update_player(attrib, value, userid):
-    COL_NAMES = ('FirstName','LastName','MobileNum','MobileCarrier')
-    if attrib in COL_NAMES:
+    df = get_all_players('pretty')
+    # Make column names lower case
+    df.columns = map(str.lower, df.columns)
+    # Checking that attrib is a valid column name
+    if attrib.lower() in df.columns.values.tolist():
         with SpyfallDB() as db:
             query = f"""UPDATE tblUsers
                     SET {attrib} = %s
@@ -84,9 +87,9 @@ def update_player(attrib, value, userid):
         # print("Invalid column name. Please check and try again.")
         return False
     # Test to see if the update was successful
-    upd_row = get_player(userid)
-    if (upd_row.get(attrib) == [value]):
-        return True
+    upd_row = get_player(value, 'pretty')
+    if (list(upd_row['UserId'].values) == [userid]):
+        return upd_row
     else:
         # print("There is an inconsistency. Double check tblUsers.")
         return False
