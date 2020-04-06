@@ -27,25 +27,25 @@ class SpyfallDB:
         # params after self are for dealing with exceptions
         self.conn.close()
         
-def get_all_players(pretty=""):
+def get_all_players(df=""):
     with SpyfallDB() as db:
         query = 'SELECT * FROM tblUsers'
         db.execute(query)
         result = db.fetchall()
-    if pretty.lower() == 'pretty':
+    if df.lower() == 'df':
         return pd.DataFrame.from_dict(result)   # return dataframe
     else:  
         return result       # return list
     
-def get_player(kword, pretty=""):
-    df = get_all_players('pretty')
-    df_lower = df.apply(lambda x: x.astype(str).str.lower())
+def get_player(kword, df=""):
+    df_temp = get_all_players('df')
+    df_lower = df_temp.apply(lambda x: x.astype(str).str.lower())
     # Lambda function to search for the kword anywhere in the dataframe
     row = df_lower.apply(lambda ks: any(ks == str(kword).lower()), axis=1)
-    if pretty.lower() == 'pretty':
-        return df[row]                  # return dataframe
+    if df.lower() == 'df':
+        return df_temp[row]                  # return dataframe
     else:
-        return df[row].to_dict('list')  # return dict
+        return df_temp[row].to_dict('list')  # return dict
     
 def add_player(fname, lname, mobilenum, mobilecarrier):
     with SpyfallDB() as db:
@@ -54,25 +54,17 @@ def add_player(fname, lname, mobilenum, mobilecarrier):
                    VALUES 
                    (%s, %s, %s, %s)"""
         val = (fname, lname, mobilenum, mobilecarrier)
-        db.execute(query, val)
+        # Returns number of rows affected
+        return db.execute(query, val)
         
 def remove_player(userid):
-    empty_row = {'UserId': [], 
-                 'FirstName': [], 
-                 'LastName': [], 
-                 'MobileNum': [], 
-                 'MobileCarrier': []}
     with SpyfallDB() as db:
         query = "DELETE FROM tblUsers WHERE UserId = %s"
-        db.execute(query, (userid))
-    # Checking to ensure no record is found (empty row)
-    if (get_player(userid) == empty_row):
-        return True
-    else:
-        return False
+        # Returns number of rows affected
+        return db.execute(query, (userid))
         
 def update_player(attrib, value, userid):
-    df = get_all_players('pretty')
+    df = get_all_players('df')
     # Make column names lower case
     df.columns = map(str.lower, df.columns)
     # Checking that attrib is a valid column name
@@ -84,10 +76,10 @@ def update_player(attrib, value, userid):
             val = (value, userid)
             db.execute(query, (val))
     else:
-        # print("Invalid column name. Please check and try again.")
+        print("Invalid column name. Please check and try again.")
         return False
-    # Test to see if the update was successful
-    upd_row = get_player(value, 'pretty')
+    # Test to see if the update was not just successful but also accurate
+    upd_row = get_player(value, 'df')
     if (list(upd_row['UserId'].values) == [userid]):
         return upd_row
     else:
