@@ -10,4 +10,4 @@ ignore/SpyFall - Copy of Locations.csv
 ignore/tblLocations.csv
 ignore/test.py
 ignore/Workbook1.csv
-__pycache__/gmail.cpython-37.pyc
+__pycache__
