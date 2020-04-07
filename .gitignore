@@ -6,8 +6,5 @@ token.json
 token.pickle
 credentials.json
 .DS_store 
-ignore/SpyFall - Copy of Locations.csv
-ignore/tblLocations.csv
-ignore/test.py
-ignore/Workbook1.csv
+ignore
 __pycache__
