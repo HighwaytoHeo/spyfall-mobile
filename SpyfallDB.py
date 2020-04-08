@@ -85,3 +85,28 @@ def update_player(attrib, value, userid):
     else:
         # print("There is an inconsistency. Double check tblUsers.")
         return False
+    
+def get_all_locations(df=""):
+    with SpyfallDB() as db:
+        query = 'SELECT * FROM tblLocations'
+        db.execute(query)
+        result = db.fetchall()
+    if df.lower() == 'df':
+        return pd.DataFrame.from_dict(result)   # return dataframe
+    else:  
+        return result
+    
+def get_jobs_by_location(location, df=""):
+    locations = get_all_locations('df')
+    loc_row = locations[locations['Location'].str.contains(location)]
+    loc_id = int(loc_row['LocationId'].values)
+    with SpyfallDB() as db:
+        query = f"""SELECT * 
+                FROM tblJobs
+                WHERE LocationId = %s"""
+        db.execute(query, loc_id)
+        result = db.fetchall()
+    if df.lower() == 'df':
+        return pd.DataFrame.from_dict(result)   # return dataframe
+    else:  
+        return result 
