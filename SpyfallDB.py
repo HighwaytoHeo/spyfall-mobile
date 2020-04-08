@@ -25,11 +25,11 @@ class SpyfallDB:
 
     def __exit__(self, exc_type, exc_val, traceback):
         # params after self are for dealing with exceptions
-        self.conn.close()
+        self.conn.close()     
         
 def get_all_players(df=""):
     with SpyfallDB() as db:
-        query = 'SELECT * FROM tblUsers'
+        query = 'SELECT * FROM tblPlayer'
         db.execute(query)
         result = db.fetchall()
     if df.lower() == 'df':
@@ -49,7 +49,7 @@ def get_player(kword, df=""):
     
 def add_player(fname, lname, mobilenum, mobilecarrier):
     with SpyfallDB() as db:
-        query = """INSERT INTO tblUsers 
+        query = """INSERT INTO tblPlayer 
                    (FirstName, LastName, MobileNum, MobileCarrier)
                    VALUES 
                    (%s, %s, %s, %s)"""
@@ -57,38 +57,38 @@ def add_player(fname, lname, mobilenum, mobilecarrier):
         # Returns number of rows affected
         return db.execute(query, val)
         
-def remove_player(userid):
+def remove_player(playerid):
     with SpyfallDB() as db:
-        query = "DELETE FROM tblUsers WHERE UserId = %s"
+        query = "DELETE FROM tblPlayer WHERE PlayerId = %s"
         # Returns number of rows affected
-        return db.execute(query, (userid))
+        return db.execute(query, (playerid))
         
-def update_player(attrib, value, userid):
+def update_player(attrib, value, playerid):
     df = get_all_players('df')
     # Make column names lower case
     df.columns = map(str.lower, df.columns)
     # Checking that attrib is a valid column name
     if attrib.lower() in df.columns.values.tolist():
         with SpyfallDB() as db:
-            query = f"""UPDATE tblUsers
+            query = f"""UPDATE tblPlayer
                     SET {attrib} = %s
-                    WHERE UserId = %s"""
-            val = (value, userid)
+                    WHERE PlayerId = %s"""
+            val = (value, playerid)
             db.execute(query, (val))
     else:
         print("Invalid column name. Please check and try again.")
         return False
     # Test to see if the update was not just successful but also accurate
     upd_row = get_player(value, 'df')
-    if (list(upd_row['UserId'].values) == [userid]):
+    if (list(upd_row['PlayerId'].values) == [playerid]):
         return upd_row
     else:
-        # print("There is an inconsistency. Double check tblUsers.")
+        # print("There is an inconsistency. Double check tblPlayer.")
         return False
     
 def get_all_locations(df=""):
     with SpyfallDB() as db:
-        query = 'SELECT * FROM tblLocations'
+        query = 'SELECT * FROM tblLocation'
         db.execute(query)
         result = db.fetchall()
     if df.lower() == 'df':
@@ -102,11 +102,11 @@ def get_jobs_by_location(location, df=""):
     loc_id = int(loc_row['LocationId'].values)
     with SpyfallDB() as db:
         query = f"""SELECT * 
-                FROM tblJobs
+                FROM tblJob
                 WHERE LocationId = %s"""
         db.execute(query, loc_id)
         result = db.fetchall()
     if df.lower() == 'df':
         return pd.DataFrame.from_dict(result)   # return dataframe
     else:  
-        return result 
+        return result
