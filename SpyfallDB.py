@@ -29,6 +29,7 @@ class SpyfallDB:
         
 class SpyfallPlayer:
     def __init__(self, playerid):
+        list = get_all_players()
         player = [element for element in list if element['PlayerId'] == playerid]
         self.player_id = playerid
         self.fname = [element['FirstName'] for element in player][0]
@@ -37,6 +38,7 @@ class SpyfallPlayer:
         self.mobile_car = [element['MobileCarrier'] for element in player][0]
         self.is_playing = None
         self.is_spy = False
+        self.spy_weight = 100
         
     def set_is_playing(self, value):
         if value.lower() == 'true':
