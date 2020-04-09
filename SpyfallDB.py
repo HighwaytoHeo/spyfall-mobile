@@ -81,7 +81,7 @@ def update_player(attrib, value, playerid):
     # Test to see if the update was not just successful but also accurate
     upd_row = get_player(value, 'df')
     if (list(upd_row['PlayerId'].values) == [playerid]):
-        return upd_row
+        return 1
     else:
         # print("There is an inconsistency. Double check tblPlayer.")
         return False
