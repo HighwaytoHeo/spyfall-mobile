@@ -25,7 +25,60 @@ class SpyfallDB:
 
     def __exit__(self, exc_type, exc_val, traceback):
         # params after self are for dealing with exceptions
-        self.conn.close()     
+        self.conn.close()    
+        
+class SpyfallPlayer:
+    def __init__(self, playerid):
+        player = [element for element in list if element['PlayerId'] == playerid]
+        self.player_id = playerid
+        self.fname = [element['FirstName'] for element in player][0]
+        self.lname = [element['LastName'] for element in player][0]
+        self.mobile_num = [element['MobileNum'] for element in player][0]
+        self.mobile_car = [element['MobileCarrier'] for element in player][0]
+        self.is_playing = None
+        self.is_spy = None
+        
+    def set_is_playing(self, value):
+        if value.lower() == 'true':
+            with SpyfallDB() as db:
+                query = f"""UPDATE tblGameSession
+                        SET IsPlaying = %s
+                        WHERE PlayerId = %s"""
+                val = (1, self.player_id)
+                db.execute(query, val)
+            self.is_playing = True
+        elif value.lower() == 'false':
+            with SpyfallDB() as db:
+                query = f"""UPDATE tblGameSession
+                        SET IsPlaying = %s
+                        WHERE PlayerId = %s"""
+                val = (0, self.player_id)
+                db.execute(query, val)
+            self.is_playing = False
+        else:
+            return False
+        return True
+    
+    def set_is_spy(self, value):
+        if value.lower() == 'true':
+            with SpyfallDB() as db:
+                query = f"""UPDATE tblGameSession
+                        SET IsSpy = %s
+                        WHERE PlayerId = %s"""
+                val = (1, self.player_id)
+                db.execute(query, val)
+            self.is_spy = True
+        elif value.lower() == 'false':
+            with SpyfallDB() as db:
+                query = f"""UPDATE tblGameSession
+                        SET IsSpy = %s
+                        WHERE PlayerId = %s"""
+                val = (0, self.player_id)
+                db.execute(query, val)
+            self.is_spy = False
+        else:
+            return False
+        return True
         
 def get_all_players(df=""):
     with SpyfallDB() as db:
@@ -74,7 +127,7 @@ def update_player(attrib, value, playerid):
                     SET {attrib} = %s
                     WHERE PlayerId = %s"""
             val = (value, playerid)
-            db.execute(query, (val))
+            db.execute(query, val)
     else:
         print("Invalid column name. Please check and try again.")
         return False
@@ -98,7 +151,7 @@ def get_all_locations(df=""):
     
 def get_jobs_by_location(location, df=""):
     locations = get_all_locations('df')
-    loc_row = locations[locations['Location'].str.contains(location)]
+    loc_row = locations[locations['Location'].str.contains(location, case=False)]
     loc_id = int(loc_row['LocationId'].values)
     with SpyfallDB() as db:
         query = f"""SELECT * 
