@@ -36,7 +36,7 @@ class SpyfallPlayer:
         self.mobile_num = [element['MobileNum'] for element in player][0]
         self.mobile_car = [element['MobileCarrier'] for element in player][0]
         self.is_playing = None
-        self.is_spy = None
+        self.is_spy = False
         
     def set_is_playing(self, value):
         if value.lower() == 'true':
@@ -55,27 +55,6 @@ class SpyfallPlayer:
                 val = (0, self.player_id)
                 db.execute(query, val)
             self.is_playing = False
-        else:
-            return False
-        return True
-    
-    def set_is_spy(self, value):
-        if value.lower() == 'true':
-            with SpyfallDB() as db:
-                query = f"""UPDATE tblGameSession
-                        SET IsSpy = %s
-                        WHERE PlayerId = %s"""
-                val = (1, self.player_id)
-                db.execute(query, val)
-            self.is_spy = True
-        elif value.lower() == 'false':
-            with SpyfallDB() as db:
-                query = f"""UPDATE tblGameSession
-                        SET IsSpy = %s
-                        WHERE PlayerId = %s"""
-                val = (0, self.player_id)
-                db.execute(query, val)
-            self.is_spy = False
         else:
             return False
         return True
