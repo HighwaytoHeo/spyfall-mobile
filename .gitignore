@@ -1,12 +1,9 @@
 Spyfall.code-workspace
 .vscode/settings.json
+__pycache__
 spyfalldb.conf
 env
 token.json
 token.pickle
 credentials.json
-<<<<<<< HEAD
-.DS_store
-=======
 .DS_store 
->>>>>>> b6c488e7f3e1cb46801b8972f9c80fbd420666b2
