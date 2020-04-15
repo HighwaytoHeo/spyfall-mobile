@@ -7,7 +7,7 @@ class GameSession:
         self._players = {}
         self._num_players = 0
         self.play_again = True
-        self.rnd_loc = rnd_loc()
+        self.rnd_loc = self.rnd_loc()
         self.timer = 480        # seconds
         
     # using property decorator 
