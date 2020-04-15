@@ -7,8 +7,7 @@ class GameSession:
         self._players = {}
         self._num_players = 0
         self.play_again = True
-        self._rnd_loc = None
-        self._spy_weight = 100
+        self.rnd_loc = rnd_loc()
         self.timer = 480        # seconds
         
     # using property decorator 
@@ -31,13 +30,9 @@ class GameSession:
     def num_players(self): 
         return self._num_players
     
-    # using property decorator 
-    # a getter function 
-    @property
-    def location(self): 
+    def rnd_loc(self): 
         self._rnd_loc_df = (SpyfallDB.get_all_locations('df')).sample(n=1)
         self._rnd_loc = self._rnd_loc_df['Location'].values[0]
-        return self._rnd_loc 
     
 class Player:
     def __init__(self, playerid):
@@ -49,6 +44,7 @@ class Player:
         self._mobile_num = [element['MobileNum'] for element in self._player][0]
         self._mobile_car = [element['MobileCarrier'] for element in self._player][0]
         self._is_spy = False
+        self._spy_weight = 100
         self.is_playing = None
     
     # using property decorator 
@@ -66,6 +62,7 @@ class Player:
         else:
             print("Invalid value. Please try again with True or False.")
 
+# Main program
 print("Welcome to Spyfall Mobile!\n")
 print(SpyfallDB.get_all_players('df'))
 ids = [int(x) for x in input("Who's playing?"
