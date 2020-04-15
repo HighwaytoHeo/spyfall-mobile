@@ -6,8 +6,8 @@ class GameSession:
     def __init__(self):
         self._players = {}
         self._num_players = 0
+        self.rnd_loc = self.gen_rnd_loc()
         self.play_again = True
-        self.rnd_loc = self.rnd_loc()
         self.timer = 480        # seconds
         
     # using property decorator 
@@ -30,9 +30,9 @@ class GameSession:
     def num_players(self): 
         return self._num_players
     
-    def rnd_loc(self): 
+    def gen_rnd_loc(self): 
         self._rnd_loc_df = (SpyfallDB.get_all_locations('df')).sample(n=1)
-        self._rnd_loc = self._rnd_loc_df['Location'].values[0]
+        return self._rnd_loc_df['Location'].values[0]
     
 class Player:
     def __init__(self, playerid):
